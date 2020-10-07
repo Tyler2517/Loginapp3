@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 public class Login extends AppCompatActivity {
     EditText mEmail, mPassword;
@@ -24,6 +28,17 @@ public class Login extends AppCompatActivity {
     TextView mCreateBtn;
     ProgressBar progressBar;
     FirebaseAuth fAuth;
+
+
+    private  void isUser() {
+        String userEnteredEmail = mEmail.getText().toString().trim();
+        String userEnteredPass = mPassword.getText().toString().trim();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User");
+
+        Query checkUser = reference.orderByChild("email").equalTo(userEnteredEmail);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +51,8 @@ public class Login extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         mLoginBtn = findViewById(R.id.loginBtn);
         mCreateBtn = findViewById(R.id.createText);
+
+
 
         mLoginBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -90,4 +107,7 @@ public class Login extends AppCompatActivity {
         });
 
     }
+
+
+
 }

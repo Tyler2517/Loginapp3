@@ -20,6 +20,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +33,8 @@ public class Register extends AppCompatActivity {
     TextView mLoginBtn;
     FirebaseAuth fAuth;
     ProgressBar progressBar;
+    FirebaseDatabase rootNode;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +61,15 @@ public class Register extends AppCompatActivity {
             public  void onClick(View v) {
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
-                final String fullName = mName.getText().toString();
-                final String phone    = mPhone.getText().toString();
+                String fullName = mName.getText().toString();
+                String phone    = mPhone.getText().toString();
+                rootNode = FirebaseDatabase.getInstance();
+                reference = rootNode.getReference("User");
+
+
+                UserHelperClass helperClass = new UserHelperClass(fullName, email, phone, password);
+
+                reference.child(fullName).setValue(helperClass);
 
                 if(TextUtils.isEmpty(email)) {
                     mEmail.setError("Email is Required.");
