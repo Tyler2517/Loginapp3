@@ -34,6 +34,16 @@
         tools:layout_editor_absoluteY="230dp" />
 
     <EditText
+        android:id="@+id/username"
+        android:layout_width="374dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_text"
+        android:hint="Username"
+        android:padding="10dp"
+        tools:layout_editor_absoluteX="18dp"
+        tools:layout_editor_absoluteY="230dp" />
+
+    <EditText
         android:id="@+id/email"
         android:layout_width="375dp"
         android:layout_height="wrap_content"

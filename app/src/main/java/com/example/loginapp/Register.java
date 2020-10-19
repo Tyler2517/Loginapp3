@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class Register extends AppCompatActivity {
 
-    EditText mName, mEmail, mPassword, mPhone;
+    EditText mName, mEmail, mPassword, mPhone, mUsername;
     Button mRegisterBtn;
     TextView mLoginBtn;
     FirebaseAuth fAuth;
@@ -47,6 +47,7 @@ public class Register extends AppCompatActivity {
         mPhone = findViewById(R.id.phone);
         mRegisterBtn = findViewById(R.id.registerBtn);
         mLoginBtn = findViewById(R.id.createText);
+        mUsername = findViewById(R.id.username);
 
         fAuth = FirebaseAuth.getInstance();
         progressBar = findViewById(R.id.progressBar);
@@ -63,13 +64,14 @@ public class Register extends AppCompatActivity {
                 String password = mPassword.getText().toString().trim();
                 String fullName = mName.getText().toString();
                 String phone    = mPhone.getText().toString();
+                String username = mUsername.getText().toString();
                 rootNode = FirebaseDatabase.getInstance();
                 reference = rootNode.getReference("User");
 
 
-                UserHelperClass helperClass = new UserHelperClass(fullName, email, phone, password);
+                UserHelperClass helperClass = new UserHelperClass(fullName, email, phone, password, username);
 
-                reference.child(fullName).setValue(helperClass);
+                reference.child(username).setValue(helperClass);
 
                 if(TextUtils.isEmpty(email)) {
                     mEmail.setError("Email is Required.");
