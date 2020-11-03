@@ -60,18 +60,18 @@ public class Register extends AppCompatActivity {
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public  void onClick(View v) {
-                String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
-                String fullName = mName.getText().toString();
-                String phone    = mPhone.getText().toString();
-                String username = mUsername.getText().toString();
-                rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("User");
+                final String email = mEmail.getText().toString().trim();
+                final String password = mPassword.getText().toString().trim();
+                final String fullName = mName.getText().toString();
+                final String phone    = mPhone.getText().toString();
+                final String username = mUsername.getText().toString();
+                //rootNode = FirebaseDatabase.getInstance();
+                //reference = rootNode.getReference("User");
 
 
-                UserHelperClass helperClass = new UserHelperClass(fullName, email, phone, password, username);
+                //UserHelperClass helperClass = new UserHelperClass(fullName, email, phone, password, username);
 
-                reference.child(username).setValue(helperClass);
+                //reference.child(username).setValue(helperClass);
 
                 if(TextUtils.isEmpty(email)) {
                     mEmail.setError("Email is Required.");
@@ -93,19 +93,38 @@ public class Register extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                // register the user in firebase
-                fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(Register.this, "User is Created", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                        } else {
-                            Toast.makeText(Register.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-                });
+
+                fAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                if (task.isSuccessful()) {
+
+                                    UserHelperClass user = new UserHelperClass(fullName, email, phone, password, username);
+
+                                    FirebaseDatabase.getInstance().getReference("Users")
+                                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            progressBar.setVisibility(View.GONE);
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(Register.this, "Created!", Toast.LENGTH_LONG).show();
+                                                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                                            } else {
+                                                //display a failure message
+                                                Toast.makeText(Register.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                progressBar.setVisibility(View.GONE);
+                                            }
+                                        }
+                                    });
+
+                                } else {
+                                    Toast.makeText(Register.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
 
             }
         });
