@@ -34,4 +34,8 @@ public class ListHelperClass {
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
+
+    public String toString(){
+        return this.name + "." + description + "-" + quantity;
+    }
 }

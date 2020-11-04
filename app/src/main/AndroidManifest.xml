@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Listview"
+            android:name=".List_view"
             android:label="@string/title_activity_listview"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
