@@ -1,5 +1,6 @@
 package com.example.loginapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.List;
+
 public class Admin extends AppCompatActivity {
     EditText eventName, eventDetail, Quantity;
     Button eventAdd, viewList;
@@ -22,8 +25,32 @@ public class Admin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Events");
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Events");
 
+        eventName = findViewById(R.id.eventName);
+        eventDetail = findViewById(R.id.eventDetail);
+        Quantity = findViewById(R.id.Quantity);
+        eventAdd = findViewById(R.id.eventAdd);
+        viewList = findViewById(R.id.viewList);
+
+
+        eventAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String mEventName = eventName.getText().toString().trim();
+                final String mDetail = eventDetail.getText().toString().trim();
+                final String mQuantity = Quantity.getText().toString();
+                ListHelperClass list = new ListHelperClass(mEventName, mDetail, mQuantity);
+                reference.child(mEventName).setValue(list);
+            }
+        });
+
+        viewList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),List_view.class));
+            }
+        });
 
     }
 }
