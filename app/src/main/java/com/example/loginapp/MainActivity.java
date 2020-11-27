@@ -24,16 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        if (user.equals("rOl2D9BuTlT4PV7OgCETceRPWTg2")){
-            managButton.setVisibility(View.VISIBLE);
-            userButton.setVisibility(View.INVISIBLE);
 
-        }
-        else{
-            managButton.setVisibility(View.INVISIBLE);
-            userButton.setVisibility(View.VISIBLE);
-
-        }
 
     }
 
