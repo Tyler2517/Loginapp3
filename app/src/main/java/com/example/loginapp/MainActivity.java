@@ -117,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
             return view;
         }
     }
@@ -130,16 +132,24 @@ public class MainActivity extends AppCompatActivity {
 
         db = FirebaseDatabase.getInstance().getReference();
         helper = new FirebaseHelper(db, this, mListView);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Intent itemInfo = new Intent(MainActivity.this, ItemInfo.class);
-                itemInfo.getExtras()
+                String name = mListView.getItemAtPosition(position).toString();
+                ListHelperClass s = (ListHelperClass) mListView.getItemAtPosition(position);
+
+                itemInfo.putExtra("Name", s.getName());
+                itemInfo.putExtra("Description", s.getDescription());
+                itemInfo.putExtra("Quantity", s.getQuantity());
                 startActivity(itemInfo);
             }
         });
+
+
     }
 
 
