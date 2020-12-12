@@ -1,14 +1,17 @@
 package com.example.loginapp;
 
 public class ListHelperClass {
-    String name, description, quantity;
+    String name, description, quantity, price;
 
     public ListHelperClass(){}
 
-    public ListHelperClass(String name, String description, String quantity) {
+
+
+    public ListHelperClass(String name, String description, String quantity, String price) {
         this.name = name;
         this.description = description;
         this.quantity = quantity;
+        this.price = price;
     }
 
     public String getName() {
@@ -35,7 +38,15 @@ public class ListHelperClass {
         this.quantity = quantity;
     }
 
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
     public String toString(){
-        return this.name + "." + description + "-" + quantity;
+        return this.name + "." + description + "-" + quantity + price;
     }
 }

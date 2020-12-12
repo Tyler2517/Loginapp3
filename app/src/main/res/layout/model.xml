@@ -35,6 +35,15 @@
             android:textStyle="italic"
             android:layout_alignParentLeft="true"/>
 
+        <TextView
+            android:id="@+id/priceTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Price..."
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="italic" />
+
 
     </LinearLayout>
 

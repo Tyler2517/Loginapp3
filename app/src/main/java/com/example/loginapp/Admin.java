@@ -18,7 +18,7 @@ import android.widget.EditText;
 import java.util.List;
 
 public class Admin extends AppCompatActivity {
-    EditText eventName, eventDetail, Quantity;
+    EditText eventName, eventDetail, Quantity, price;
     Button eventAdd, viewList;
 
     @Override
@@ -32,6 +32,7 @@ public class Admin extends AppCompatActivity {
         Quantity = findViewById(R.id.Quantity);
         eventAdd = findViewById(R.id.eventAdd);
         viewList = findViewById(R.id.viewList);
+        price = findViewById(R.id.price);
 
 
         eventAdd.setOnClickListener(new View.OnClickListener() {
@@ -40,7 +41,8 @@ public class Admin extends AppCompatActivity {
                 final String mEventName = eventName.getText().toString().trim();
                 final String mDetail = eventDetail.getText().toString().trim();
                 final String mQuantity = Quantity.getText().toString();
-                ListHelperClass list = new ListHelperClass(mEventName, mDetail, mQuantity);
+                final String mPrice = price.getText().toString();
+                ListHelperClass list = new ListHelperClass(mEventName, mDetail, mQuantity, mPrice);
                 reference.child(mEventName).setValue(list);
             }
         });

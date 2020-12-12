@@ -47,6 +47,21 @@
             android:textColor="#B53F3F"
             android:textSize="18sp"></TextView>
 
+        <TextView
+            android:id="@+id/event_Price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#3F51B5"
+            android:textSize="18sp"></TextView>
+
+        <Button
+            android:id="@+id/addBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Item To Cart" />
+
 
     </LinearLayout>
 

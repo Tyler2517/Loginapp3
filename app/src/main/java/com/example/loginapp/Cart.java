@@ -4,20 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,17 +22,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class Cart extends AppCompatActivity {
     ListView mListView;
     DatabaseReference db;
     FirebaseHelper helper;
     CustomAdapter adapter;
-    TextView nameText, destText, quantityText;
-    FloatingActionButton Fab;
-
     public class FirebaseHelper {
         DatabaseReference db;
-        ArrayList<ListHelperClass> list1 = new ArrayList<>();
+        ArrayList<Cart_Items> list2 = new ArrayList<>();
         ListView mListview;
         Context c;
 
@@ -46,23 +39,23 @@ public class MainActivity extends AppCompatActivity {
             this.mListview = mListview;
             this.retrieve();
         }
-        public ArrayList<ListHelperClass> retrieve() {
-            db.child("Events").addValueEventListener(new ValueEventListener() {
+        public ArrayList<Cart_Items> retrieve() {
+            db.child("Cart").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    list1.clear();
+                    list2.clear();
                     if (snapshot.exists() && snapshot.getChildrenCount() > 0){
                         for(DataSnapshot ds : snapshot.getChildren()) {
-                            ListHelperClass list12 = ds.getValue(ListHelperClass.class);
-                            list1.add(list12);
+                            Cart_Items list12 = ds.getValue(Cart_Items.class);
+                            list2.add(list12);
                         }
                     }
-                    adapter = new CustomAdapter(c, list1);
+                    adapter = new CustomAdapter(c, list2);
                     mListview.setAdapter(adapter);
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
-                            mListview.smoothScrollToPosition(list1.size());
+                            mListview.smoothScrollToPosition(list2.size());
                         }
                     });
                 }
@@ -72,15 +65,15 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(c, "Error", Toast.LENGTH_LONG).show();
                 }
             });
-            return list1;
+            return list2;
         }
     }
 
     class CustomAdapter extends BaseAdapter{
         Context c;
-        ArrayList<ListHelperClass> list1;
+        ArrayList<Cart_Items> list1;
 
-        public CustomAdapter(Context c, ArrayList<ListHelperClass> list1){
+        public CustomAdapter(Context c, ArrayList<Cart_Items> list1){
             this.c = c;
             this.list1 = list1;
         }
@@ -103,18 +96,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             if (view == null) {
-                view = LayoutInflater.from(c).inflate(R.layout.model, viewGroup, false);
+                view = LayoutInflater.from(c).inflate(R.layout.cart_list, viewGroup, false);
             }
 
             TextView nameTextView = view.findViewById(R.id.nameTextView);
-            TextView descTextView = view.findViewById(R.id.descTextView);
             TextView quantityTextView = view.findViewById(R.id.quantityTextView);
             TextView priceTextView = view.findViewById(R.id.priceTextView);
 
-            final ListHelperClass s = (ListHelperClass) this.getItem(i);
+            final Cart_Items s = (Cart_Items) this.getItem(i);
 
             nameTextView.setText(s.getName());
-            descTextView.setText(s.getDescription());
             quantityTextView.setText(s.getQuantity());
             priceTextView.setText(s.getPrice());
 
@@ -129,48 +120,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_cart);
 
-        mListView = (ListView) findViewById(R.id.eventList);
-        Fab = findViewById(R.id.fab);
+        ListView mListView = findViewById(R.id.current_List);
 
         db = FirebaseDatabase.getInstance().getReference();
         helper = new FirebaseHelper(db, this, mListView);
 
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent itemInfo = new Intent(MainActivity.this, ItemInfo.class);
-
-                ListHelperClass s = (ListHelperClass) mListView.getItemAtPosition(position);
-
-                itemInfo.putExtra("Name", s.getName());
-                itemInfo.putExtra("Description", s.getDescription());
-                itemInfo.putExtra("Quantity", s.getQuantity());
-                itemInfo.putExtra("Price", s.getPrice());
-                startActivity(itemInfo);
-            }
-        });
-
-        Fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent itemInfo = new Intent(MainActivity.this, Cart.class);
-                startActivity(itemInfo);
-            }
-        });
 
 
     }
-
-
-
-    public void logout(View view) {
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(getApplicationContext(), Login.class));
-        finish();
-    }
-
 }
